@@ -1,0 +1,28 @@
+{
+  "name": "nodejs-tdd",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "chai": "^4.2.0",
+    "cuid": "^2.1.6",
+    "express": "^4.17.1",
+    "istanbul": "^0.4.5",
+    "nyc": "^14.1.1",
+    "supertest": "^4.0.2"
+  },
+  "devDependencies": {
+    "mocha": "^6.2.2"
+  },
+  "scripts": {
+    "test": "mocha test/**/*.js --timeout=5000",
+    "cover": "nyc --reporter=html mocha test/**/*.js --timeout=5000"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
