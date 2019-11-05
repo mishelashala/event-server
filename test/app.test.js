@@ -5,7 +5,7 @@ const app = require("../app");
 describe("appointment app", () => {
   it("should return the list of current events", () => {
     supertest(app)
-      .get("/events")
+      .get("/api/events")
       .expect("Content-Type", /json/)
       .expect(200)
       .end((err, res) => {
@@ -25,9 +25,39 @@ describe("appointment app", () => {
       });
   });
 
+  it("should return an event by id", () => {
+    supertest(app)
+      .get("/api/events/1")
+      .expect("Content-Type", /json/)
+      .expect(200)
+      .end((err, res) => {
+        if (err) {
+          throw err;
+        }
+
+        const expectedEvent = {
+          id: "1",
+          name: "Tortas Event",
+        };
+
+        expect(res.body).to.deep.equal(expectedEvent);
+      });
+  });
+
+  it("should return 404 when you try to find a non existent event by id", () => {
+    supertest(app)
+      .get("/api/events/100")
+      .expect(404)
+      .end((err, res) => {
+        if (err) {
+          throw err;
+        }
+      });
+  });
+
   it("should create a new event and return the recently created event in the response", () => {
     supertest(app)
-      .post("/events")
+      .post("/api/events")
       .send({
         name: "Ksquare Party",
       })
@@ -46,7 +76,7 @@ describe("appointment app", () => {
 
   it("should try to create a new event without a name and return an error", () => {
     supertest(app)
-      .post("/events")
+      .post("/api/events")
       .send({
         name: "",
       })
@@ -63,7 +93,7 @@ describe("appointment app", () => {
 
   it("should try to create a new event with an undefined name and return an error", () => {
     supertest(app)
-      .post("/events")
+      .post("/api/events")
       .send({
         name: undefined,
       })
@@ -80,7 +110,7 @@ describe("appointment app", () => {
 
   it("should delete an existing event", () => {
     supertest(app)
-      .delete("/events/1")
+      .delete("/api/events/1")
       .expect(204)
       .end((err, res) => {
         if (err) {
@@ -93,7 +123,7 @@ describe("appointment app", () => {
 
   it("should try to delete a non existing event and return an error", () => {
     supertest(app)
-      .delete("/events/3")
+      .delete("/api/events/3")
       .expect("Content-Type", /json/)
       .expect(400)
       .end((err, res) => {
@@ -107,7 +137,7 @@ describe("appointment app", () => {
 
   it("should update an existing event and return the updated version", () => {
     supertest(app)
-      .put("/events/2")
+      .put("/api/events/2")
       .send({ name: "Updated Another Tortas Event" })
       .expect("Content-Type", /json/)
       .expect(200)
@@ -124,7 +154,7 @@ describe("appointment app", () => {
 
   it("should try to update an existing event with an empty name and return an error", () => {
     supertest(app)
-      .put("/events/2")
+      .put("/api/events/2")
       .send({ name: "" })
       .expect("Content-Type", /json/)
       .expect(400)
@@ -139,7 +169,7 @@ describe("appointment app", () => {
 
   it("should try to update an existing event with an undefined name and return an error", () => {
     supertest(app)
-      .put("/events/2")
+      .put("/api/events/2")
       .send({ name: undefined })
       .expect("Content-Type", /json/)
       .expect(400)
@@ -154,7 +184,7 @@ describe("appointment app", () => {
 
   it("should try to update a non existing event and return an error", () => {
     supertest(app)
-      .put("/events/5")
+      .put("/api/events/5")
       .send({ name: "Updated Another Tortas Event" })
       .expect("Content-Type", /json/)
       .expect(400)
